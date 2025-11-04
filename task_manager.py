@@ -25,12 +25,20 @@ def get_db_connection():
     try:
         # Try to get from Streamlit secrets (for Streamlit Cloud)
         db_config = st.secrets["postgres"]
+        
+        # Check if connection string is provided (for Vercel Prisma/Postgres)
+        if "connection_string" in db_config or "postgresql_url" in db_config:
+            # Use connection string directly (Vercel format)
+            connection_string = db_config.get("connection_string") or db_config.get("postgresql_url")
+            return psycopg2.connect(connection_string)
+        
+        # Otherwise use individual parameters
         return psycopg2.connect(
             host=db_config.get("host", "localhost"),
             database=db_config.get("database", "hrms_db"),
             user=db_config.get("user", "postgres"),
             password=db_config.get("password", "Abhi122103"),
-            port=db_config.get("port", 5432)
+            port=int(db_config.get("port", 5432))
         )
     except (KeyError, AttributeError, FileNotFoundError):
         # Fallback to local development values

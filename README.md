@@ -65,8 +65,15 @@ For local development, the app will use default database settings. Update `get_d
 1. Go to your app on Streamlit Cloud
 2. Click **"Manage app"** (lower right corner)
 3. Go to **Settings** → **Secrets**
-4. Add these secrets:
+4. Add secrets (choose one option):
 
+**Option 1: Connection String (Recommended for Vercel Prisma)**
+```toml
+[postgres]
+connection_string = "postgresql://user:password@host:port/database?sslmode=require"
+```
+
+**Option 2: Individual Parameters**
 ```toml
 [postgres]
 host = "your-database-host.com"
@@ -76,7 +83,17 @@ password = "your-database-password"
 port = 5432
 ```
 
-**Note**: You need a cloud PostgreSQL database (e.g., from Supabase, Railway, Neon, or AWS RDS).
+### Getting Vercel Prisma Database Connection String
+
+1. Go to Vercel Dashboard
+2. Select your project
+3. Go to **Storage** tab
+4. Click on your **Postgres** database
+5. Click **Connection String** or **.env.local**
+6. Copy the `POSTGRES_URL` or connection string
+7. Use it in Streamlit Cloud secrets as `connection_string`
+
+**Note**: Ensure your Vercel database allows external connections (not just from Vercel functions).
 
 ### Database Options for Cloud
 
