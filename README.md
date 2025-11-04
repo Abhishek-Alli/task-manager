@@ -56,18 +56,34 @@ streamlit run task_manager.py
 
 ## Configuration
 
-Update database connection settings in `task_manager.py`:
+### Local Development
 
-```python
-def get_db_connection():
-    return psycopg2.connect(
-        host='localhost',
-        database='hrms_db',
-        user='postgres',
-        password='your_password',
-        port=5432
-    )
+For local development, the app will use default database settings. Update `get_db_connection()` function in `task_manager.py` if needed.
+
+### Streamlit Cloud Deployment
+
+1. Go to your app on Streamlit Cloud
+2. Click **"Manage app"** (lower right corner)
+3. Go to **Settings** → **Secrets**
+4. Add these secrets:
+
+```toml
+[postgres]
+host = "your-database-host.com"
+database = "hrms_db"
+user = "postgres"
+password = "your-database-password"
+port = 5432
 ```
+
+**Note**: You need a cloud PostgreSQL database (e.g., from Supabase, Railway, Neon, or AWS RDS).
+
+### Database Options for Cloud
+
+- **Supabase** (Free tier): https://supabase.com
+- **Railway** (Free tier): https://railway.app
+- **Neon** (Free tier): https://neon.tech
+- **AWS RDS**: https://aws.amazon.com/rds/postgresql
 
 ## Default Login
 

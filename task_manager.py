@@ -20,13 +20,27 @@ import random
 from streamlit_option_menu import option_menu
 
 def get_db_connection():
-    return psycopg2.connect(
-        host='localhost',
-        database='hrms_db',
-        user='postgres',
-        password='Abhi122103',
-        port=5432
-    )
+    # Use Streamlit secrets for production (Streamlit Cloud)
+    # Fallback to local values for local development
+    try:
+        # Try to get from Streamlit secrets (for Streamlit Cloud)
+        db_config = st.secrets["postgres"]
+        return psycopg2.connect(
+            host=db_config.get("host", "localhost"),
+            database=db_config.get("database", "hrms_db"),
+            user=db_config.get("user", "postgres"),
+            password=db_config.get("password", "Abhi122103"),
+            port=db_config.get("port", 5432)
+        )
+    except (KeyError, AttributeError, FileNotFoundError):
+        # Fallback to local development values
+        return psycopg2.connect(
+            host='localhost',
+            database='hrms_db',
+            user='postgres',
+            password='Abhi122103',
+            port=5432
+        )
 
 def init_db():
     conn = get_db_connection()
